@@ -1,12 +1,12 @@
 <?php
 
-namespace trntv\filekit\events;
+namespace shirase55\filekit\events;
 
 use yii\base\Event;
 
 /**
  * Class StorageEvent
- * @package trntv\filekit\events
+ * @package shirase55\filekit\events
  * @author Eugene Terentev <eugene@terentev.net>
  */
 class StorageEvent extends Event

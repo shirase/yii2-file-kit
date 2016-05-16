@@ -1,9 +1,9 @@
 <?php
-namespace trntv\filekit\tests\data;
+namespace shirase55\filekit\tests\data;
 
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
-use trntv\filekit\filesystem\FilesystemBuilderInterface;
+use shirase55\filekit\filesystem\FilesystemBuilderInterface;
 
 /**
  * @author Eugene Terentev <eugene@terentev.net>

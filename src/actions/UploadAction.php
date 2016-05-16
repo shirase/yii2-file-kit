@@ -1,8 +1,8 @@
 <?php
-namespace trntv\filekit\actions;
+namespace shirase55\filekit\actions;
 
 use League\Flysystem\FilesystemInterface;
-use trntv\filekit\events\UploadEvent;
+use shirase55\filekit\events\UploadEvent;
 use League\Flysystem\File as FlysystemFile;
 use Yii;
 use yii\base\DynamicModel;
@@ -16,7 +16,7 @@ use yii\web\UploadedFile;
 * public function actions(){
 *   return [
 *           'upload'=>[
-*               'class'=>'trntv\filekit\actions\UploadAction',
+*               'class'=>'shirase55\filekit\actions\UploadAction',
 *           ]
 *       ];
 *   }

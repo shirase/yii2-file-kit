@@ -37,11 +37,11 @@ class UploadBehavior extends Behavior
     /**
      * @var string
      */
-    public $pathAttribute;
+    public $urlAttribute;
     /**
      * @var string
      */
-    public $baseUrlAttribute;
+    public $pathAttribute;
     /**
      * @var string
      */
@@ -68,7 +68,6 @@ class UploadBehavior extends Behavior
      * Schema example:
      *      `id` INT NOT NULL AUTO_INCREMENT,
      *      `path` VARCHAR(1024) NOT NULL,
-     *      `base_url` VARCHAR(255) NULL,
      *      `type` VARCHAR(255) NULL,
      *      `size` INT NULL,
      *      `name` VARCHAR(255) NULL,
@@ -126,8 +125,8 @@ class UploadBehavior extends Behavior
     public function fields()
     {
         $fields = [
+            'url' => $this->urlAttribute,
             'path' => $this->pathAttribute,
-            'base_url' => $this->baseUrlAttribute,
             'type' => $this->typeAttribute,
             'size' => $this->sizeAttribute,
             'name' => $this->nameAttribute,
@@ -261,7 +260,7 @@ class UploadBehavior extends Behavior
     public function afterFindSingle()
     {
         $file = array_map(function ($attribute) {
-            return $this->owner->getAttribute($attribute);
+            return $attribute ? $this->owner->{$attribute} : null;
         }, $this->fields());
         if (array_key_exists('path', $file) && $file['path']) {
             $this->owner->{$this->attribute} = $this->enrichFileData($file);
@@ -392,7 +391,8 @@ class UploadBehavior extends Behavior
             $data = [
                 'type' => $fs->getMimetype($file['path']),
                 'size' => $fs->getSize($file['path']),
-                'timestamp' => $fs->getTimestamp($file['path'])
+                'timestamp' => $fs->getTimestamp($file['path']),
+                'url' => $this->getStorage()->baseUrl . '/' . $file['path'],
             ];
             foreach ($data as $k => $v) {
                 if (!array_key_exists($k, $file) || !$file[$k]) {

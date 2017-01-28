@@ -34,6 +34,9 @@ class UploadBehavior extends Behavior
      * @var
      */
     public $attributePrefix;
+
+    public $attributePathName = 'path';
+    public $attributeBaseUrlName = 'url';
     /**
      * @var string
      */
@@ -125,8 +128,8 @@ class UploadBehavior extends Behavior
     public function fields()
     {
         $fields = [
-            'url' => $this->urlAttribute,
-            'path' => $this->pathAttribute,
+            $this->attributePathName ? : 'path' => $this->pathAttribute,
+            $this->attributeBaseUrlName ? : 'url' => $this->urlAttribute,
             'type' => $this->typeAttribute,
             'size' => $this->sizeAttribute,
             'name' => $this->nameAttribute,
@@ -262,6 +265,9 @@ class UploadBehavior extends Behavior
         $file = array_map(function ($attribute) {
             return $attribute ? $this->owner->{$attribute} : null;
         }, $this->fields());
+        if ($file['path'] !== null && $file['base_url'] === null){
+            $file['base_url'] = $this->getStorage()->baseUrl;
+        }
         if (array_key_exists('path', $file) && $file['path']) {
             $this->owner->{$this->attribute} = $this->enrichFileData($file);
         }

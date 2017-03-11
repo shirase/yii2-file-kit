@@ -10,7 +10,7 @@ namespace shirase55\filekit\actions;
 
 use yii\web\HttpException;
 use League\Flysystem\FilesystemInterface;
-use trntv\filekit\events\UploadEvent;
+use shirase55\filekit\events\UploadEvent;
 use League\Flysystem\File as FlysystemFile;
 
 /**

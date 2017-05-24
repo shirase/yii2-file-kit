@@ -354,6 +354,9 @@ class UploadBehavior extends Behavior
      */
     protected function loadModel(&$model, $data)
     {
+        if (!$data && $model->isNewRecord)
+            return $model;
+
         $attributes = array_flip($model->attributes());
         foreach ($this->fields() as $dataField => $modelField) {
             if ($modelField && array_key_exists($modelField, $attributes)) {

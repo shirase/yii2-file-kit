@@ -354,7 +354,7 @@ class UploadBehavior extends Behavior
      */
     protected function loadModel(&$model, $data)
     {
-        if (!$data)
+        if (!isset($data))
             return $model;
 
         $attributes = array_flip($model->attributes());

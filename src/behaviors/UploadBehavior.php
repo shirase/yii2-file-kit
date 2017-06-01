@@ -354,7 +354,7 @@ class UploadBehavior extends Behavior
      */
     protected function loadModel(&$model, $data)
     {
-        if (!$data && $model->isNewRecord)
+        if (!$data)
             return $model;
 
         $attributes = array_flip($model->attributes());

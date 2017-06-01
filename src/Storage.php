@@ -139,6 +139,54 @@ class Storage extends Component
     }
 
     /**
+     * @param $stream resource|string File resource or content
+     * @param string|null $fileName, File name, generated if null
+     * @param bool $overwrite
+     * @param array $config
+     * @return bool|string
+     * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function saveStream($stream, $fileName = null, $overwrite = false, $config = [])
+    {
+        $dirIndex = $this->getDirIndex();
+        if ($fileName === null) {
+            do {
+                $filename = Yii::$app->security->generateRandomString();
+                $path = implode('/', [$dirIndex, $filename]);
+            } while ($this->getFilesystem()->has($path));
+        } else {
+            $path = implode('/', [$dirIndex, $fileName]);
+        }
+
+        $this->beforeSave($path, $this->getFilesystem());
+
+        if (is_string($stream)) {
+            $streamContent = $stream;
+            $stream = fopen('php://memory','r+');
+            fwrite($stream, $streamContent);
+            rewind($stream);
+        }
+
+        if ($overwrite) {
+            $success = $this->getFilesystem()->putStream($path, $stream, $config);
+        } else {
+            $success = $this->getFilesystem()->writeStream($path, $stream, $config);
+        }
+
+        if (is_resource($stream)) {
+            fclose($stream);
+        }
+
+        if ($success) {
+            $this->afterSave($path, $this->getFilesystem());
+            return $path;
+        }
+
+        return false;
+    }
+
+    /**
      * @param $files array|\yii\web\UploadedFile[]
      * @param bool $preserveFileName
      * @param bool $overwrite

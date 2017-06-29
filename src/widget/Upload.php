@@ -110,10 +110,6 @@ class Upload extends InputWidget
                 'files' => $this->files,
                 'previewImage' => $this->previewImage,
                 'showPreviewFilename' => $this->showPreviewFilename,
-                'pathAttribute' => 'path',
-                'baseUrlAttribute' => 'base_url',
-                'pathAttributeName' => 'path',
-                'baseUrlAttributeName' => 'base_url',
                 'messages' => [
                     'maxNumberOfFiles' => Yii::t($this->messagesCategory, 'Maximum number of files exceeded'),
                     'acceptFileTypes' => Yii::t($this->messagesCategory, 'File type not allowed'),

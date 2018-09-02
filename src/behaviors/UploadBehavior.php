@@ -347,7 +347,10 @@ class UploadBehavior extends Behavior
     {
         $files = $this->owner->{$this->attribute};
         foreach ($this->additionalFields as $field) {
-            $files[$field] = $this->owner->{$field};
+            $files = array_map(function($file) use ($field) {
+                $file[$field] = $this->owner->{$field};
+                return $file;
+            }, $files);
         }
         return $files ?: [];
     }

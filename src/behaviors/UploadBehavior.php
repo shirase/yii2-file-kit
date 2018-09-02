@@ -43,18 +43,22 @@ class UploadBehavior extends Behavior
      * @var string
      */
     public $pathAttribute;
+
     /**
      * @var string
      */
     public $typeAttribute;
+
     /**
      * @var string
      */
     public $sizeAttribute;
+
     /**
      * @var string
      */
     public $nameAttribute;
+
     /**
      * @var string
      */
@@ -64,6 +68,7 @@ class UploadBehavior extends Behavior
      * @var string name of the relation
      */
     public $uploadRelation;
+
     /**
      * @var $uploadModel
      * Schema example:
@@ -76,6 +81,7 @@ class UploadBehavior extends Behavior
      *      `foreign_key_id` INT NOT NULL,
      */
     public $uploadModel;
+
     /**
      * @var string
      */
@@ -86,6 +92,8 @@ class UploadBehavior extends Behavior
      * Filestorage component name or Yii2 compatible object configuration
      */
     public $filesStorage = 'fileStorage';
+
+    public $additionalFields = [];
 
     /**
      * @var array
@@ -138,6 +146,10 @@ class UploadBehavior extends Behavior
             $fields = array_map(function ($fieldName) {
                 return $this->attributePrefix . $fieldName;
             }, $fields);
+        }
+
+        foreach ($this->additionalFields as $field) {
+            $fields[$field] = $field;
         }
 
         return $fields;

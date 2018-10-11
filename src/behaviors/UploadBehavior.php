@@ -346,11 +346,13 @@ class UploadBehavior extends Behavior
     protected function getUploaded()
     {
         $files = $this->owner->{$this->attribute};
-        foreach ($this->additionalFields as $field) {
-            $files = array_map(function($file) use ($field) {
-                $file[$field] = $this->owner->{$field};
-                return $file;
-            }, $files);
+        if ($files) {
+            foreach ($this->additionalFields as $field) {
+                $files = array_map(function($file) use ($field) {
+                    $file[$field] = $this->owner->{$field};
+                    return $file;
+                }, $files);
+            }
         }
         return $files ?: [];
     }

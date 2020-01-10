@@ -1,5 +1,4 @@
-[![Packagist](https://img.shields.io/packagist/dt/shirase55/yii2-file-kit.svg)]()
-[![Dependency Status](https://www.versioneye.com/php/shirase55:yii2-file-kit/badge.svg)](https://www.versioneye.com/php/shirase55:yii2-file-kit/2.0.0)
+[![Packagist](https://img.shields.io/packagist/dt/yii2-starter-kit/yii2-file-kit.svg)]()
 
 This kit is designed to automate routine processes of uploading files, their saving and storage.
 It includes:
@@ -12,7 +11,7 @@ Here you can see list of available [filesystem adapters](https://github.com/thep
 
 Demo
 ----
-Since file kit is a part of [yii2-starter-kit](https://github.com/shirase55/yii2-starter-kit) it's demo can be found in starter kit demo [here](http://backend.yii2-starter-kit.terentev.net/article/create).
+Since file kit is a part of [yii2-starter-kit](https://github.com/yii2-starter-kit/yii2-starter-kit) it's demo can be found in starter kit demo [here](http://backend.yii2-starter-kit.terentev.net/article/create).
 
 # Installation
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
@@ -20,13 +19,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require shirase55/yii2-file-kit
+php composer.phar require yii2-starter-kit/yii2-file-kit
 ```
 
 or add
 
 ```
-"shirase55/yii2-file-kit": "@stable"
+"yii2-starter-kit/yii2-file-kit": "@stable"
 ```
 
 to the require section of your `composer.json` file.
@@ -166,13 +165,31 @@ echo \shirase55\filekit\widget\Upload::widget([
     'model' => $model,
     'attribute' => 'files',
     'url' => ['upload'],
+    'uploadPath' => 'subfolder', // optional, for storing files in storage subfolder
     'sortable' => true,
     'maxFileSize' => 10 * 1024 * 1024, // 10Mb
     'minFileSize' => 1 * 1024 * 1024, // 1Mb
-    'maxNumberOfFiles' => 3 // default 1,
-    'acceptFileTypes' => new JsExpression('/(\.|\/)(gif|jpe?g|png)$/i'),
+    'maxNumberOfFiles' => 3, // default 1,
+    'acceptFileTypes' => new \yii\web\JsExpression('/(\.|\/)(gif|jpe?g|png)$/i'),
     'showPreviewFilename' => false,
-    'clientOptions' => [ ...other blueimp options... ]
+    'clientOptions' => [/* ...other blueimp options... */]
+]);
+```
+
+Standalone usage - without model
+```php
+echo \trntv\filekit\widget\Upload::widget([
+    'name' => 'filename',
+    'hiddenInputId' => 'filename', // must for not use model
+    'url' => ['upload'],
+    'uploadPath' => 'subfolder', // optional, for storing files in storage subfolder
+    'sortable' => true,
+    'maxFileSize' => 10 * 1024 * 1024, // 10Mb
+    'minFileSize' => 1 * 1024 * 1024, // 1Mb
+    'maxNumberOfFiles' => 3, // default 1,
+    'acceptFileTypes' => new \yii\web\JsExpression('/(\.|\/)(gif|jpe?g|png)$/i'),
+    'showPreviewFilename' => false,
+    'clientOptions' => [/* ...other blueimp options... */]
 ]);
 ```
 
@@ -182,10 +199,11 @@ echo $form->field($model, 'files')->widget(
     '\shirase55\filekit\widget\Upload',
     [
         'url' => ['upload'],
+        'uploadPath' => 'subfolder', // optional, for storing files in storage subfolder
         'sortable' => true,
         'maxFileSize' => 10 * 1024 * 1024, // 10 MiB
         'maxNumberOfFiles' => 3,
-        'clientOptions' => [ ...other blueimp options... ]
+        'clientOptions' => [/* ...other blueimp options... */]
     ]
 );
 ```

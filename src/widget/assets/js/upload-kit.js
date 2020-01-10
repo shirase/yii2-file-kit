@@ -1,6 +1,6 @@
 /*!
  * Yii2 File Kit library
- * http://github.com/shirase55/yii2-file-kit
+ * http://github.com/yii2-starter-kit/yii2-file-kit
  *
  * Author: Eugine Terentev <eugine@terentev.net>
  *
@@ -35,10 +35,10 @@
                     .after($('<span class="glyphicon glyphicon-circle-arrow-down drag"></span>'))
                     .after($('<span/>', {"data-toggle":"popover", "class":"glyphicon glyphicon-exclamation-sign error-popover"}))
                     .after(
-                    '<div class="progress">'+
-                    '<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>'+
-                    '</li>'
-                );
+                        '<div class="progress">'+
+                        '<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>'+
+                        '</li>'
+                    );
                 $files.on('click', '.upload-kit-item .remove', methods.removeItem);
                 methods.checkInputVisibility();
                 methods.fileuploadInit();
@@ -63,10 +63,13 @@
                     messages: options.messages,
                     process: true,
                     getNumberOfFiles: methods.getNumberOfFiles,
-                start: function (e, data) {
+                    start: function (e, data) {
+                        if(options.errorHandler == 'yii'){
+                            $container.parents('form').yiiActiveForm('updateAttribute', $emptyInput.attr('id'), '');
+                        }
                         $container.find('.upload-kit-input')
-                                .removeClass('error')
-                                .addClass('in-progress');
+                            .removeClass('error')
+                            .addClass('in-progress');
                         $input.trigger('start');
                         if (options.start !== undefined) options.start(e, data);
                     },
@@ -128,7 +131,9 @@
                 });
             },
             showError: function(error){
-                if ($.fn.popover) {
+                if(options.errorHandler == 'yii'){
+                    $container.parents('form').yiiActiveForm('updateAttribute', $emptyInput.attr('id'), [error]);
+                }else if ($.fn.popover) {
                     $container.find('.error-popover').attr('data-content', error).popover({html:true,trigger:"hover"});
                 }
                 $container.find('.upload-kit-input').addClass('error');
@@ -148,12 +153,11 @@
             },
             createItem: function(file){
                 var name = options.name;
-                var index = methods.getNumberOfFiles();
+                var index = methods.getNewItemIndex();
                 if (options.multiple) {
                     name += '[' + index + ']';
                 }
-                console.log(options);
-                var item = $('<li>', {"class": "upload-kit-item done"})
+                var item = $('<li>', {"class": "upload-kit-item done", value: index})
                     .append($('<input/>', {"name": name + '[path]', "value": file.path, "type":"hidden"}))
                     .append($('<input/>', {"name": name + '[name]', "value": file.name, "type":"hidden"}))
                     .append($('<input/>', {"name": name + '[size]', "value": file.size, "type":"hidden"}))
@@ -195,12 +199,19 @@
             getNumberOfFiles: function() {
                 return $container.find('.files .upload-kit-item').length;
             },
+            getNewItemIndex: function () {
+                var existingIndexes = [];
+                $container.find('.files .upload-kit-item').each(function (index, item) {
+                    existingIndexes.push(index);
+                });
+                return existingIndexes.length ? (Math.max.apply(Math, existingIndexes)+1) : 0;
+            },
             updateOrder: function () {
                 $files.find('.upload-kit-item').each(function(index, item){
                     $(item).find('input[data-role=order]').val(index);
                 })
             }
-        };
+        }; 
 
         methods.init.apply(this);
         return this;

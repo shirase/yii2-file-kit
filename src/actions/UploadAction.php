@@ -85,6 +85,27 @@ class UploadAction extends BaseAction
     public $validationRules;
 
     /**
+     * @var string path where files would be stored
+     */
+    public $uploadPath = '';
+
+    /**
+     * An array config when save file.
+     * It can be a callable for more flexible
+     *
+     * ```php
+     * function (\trntv\filekit\File $fileObj) {
+     *
+     *      return ['ContentDisposition' => 'filename="' . $fileObj->getPathInfo('filename') . '"'];
+     * }
+     * ```
+     *
+     * @var array|callable
+     * @since 2.0.2
+     */
+    public $saveConfig = [];
+
+    /**
      *
      */
     public function init()
@@ -93,6 +114,10 @@ class UploadAction extends BaseAction
 
         if (\Yii::$app->request->get('fileparam')) {
             $this->fileparam = \Yii::$app->request->get('fileparam');
+        }
+
+        if (\Yii::$app->request->get('upload-path')) {
+            $this->uploadPath = \Yii::$app->request->get('upload-path');
         }
 
         if ($this->disableCsrf) {
@@ -120,7 +145,7 @@ class UploadAction extends BaseAction
             if ($uploadedFile->error === UPLOAD_ERR_OK) {
                 $validationModel = DynamicModel::validateData(['file' => $uploadedFile], $this->validationRules);
                 if (!$validationModel->hasErrors()) {
-                    $path = $this->getFileStorage()->save($uploadedFile);
+                    $path = $this->getFileStorage()->save($uploadedFile, false, false, $this->saveConfig, $this->uploadPath);
 
                     if ($path) {
                         $output[$this->responsePathParam] = $path;

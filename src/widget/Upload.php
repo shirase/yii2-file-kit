@@ -20,6 +20,13 @@ use yii\widgets\InputWidget;
  */
 class Upload extends InputWidget
 {
+
+    /**
+     * Avaible errors handlers
+     */
+    const YII_ERROR_HANDLER = 'yii';
+    const POPOVER_ERROR_HANDLER = 'popover';
+
     /**
      * @var
      */
@@ -28,6 +35,12 @@ class Upload extends InputWidget
      * @var array|\ArrayObject
      */
     public $url;
+
+    /**
+     * @var string path where files would be stored
+     */
+    public $uploadPath = '';
+
     /**
      * @var array
      */
@@ -68,6 +81,18 @@ class Upload extends InputWidget
      * @var bool preview image file or not in the upload box.
      */
     public $previewImage = true;
+    /**
+     * custom hiddenInput id，if not set $this->options['id'] will be use.
+     * useful if use name,value
+     * @var null|string
+     */
+    public $hiddenInputId = null;
+    /**
+     * Client error handler.
+     * For using yiiActiveForm set to 'yii'
+     * @var string
+     */
+    public $errorHandler = self::POPOVER_ERROR_HANDLER;
 
     /**
      * @throws \yii\base\InvalidConfigException
@@ -98,6 +123,17 @@ class Upload extends InputWidget
             $this->files = $this->multiple ? $this->value : [$this->value];
         }
 
+        if (!array_key_exists('upload-path', $this->url) && !empty($this->uploadPath)) {
+            $this->url['upload-path'] = $this->uploadPath;
+        }
+        if(!in_array($this->errorHandler,[self::YII_ERROR_HANDLER, self::POPOVER_ERROR_HANDLER]))
+            throw new InvalidParamException('errorHandler param can be "yii" or "popover"');
+        if($this->hasModel() && $this->errorHandler == self::YII_ERROR_HANDLER){
+            $this->addFieldValidator();
+        } else {
+            $this->errorHandler = self::POPOVER_ERROR_HANDLER;
+        }
+
         $this->clientOptions = ArrayHelper::merge(
             [
                 'url' => Url::to($this->url),
@@ -110,6 +146,11 @@ class Upload extends InputWidget
                 'files' => $this->files,
                 'previewImage' => $this->previewImage,
                 'showPreviewFilename' => $this->showPreviewFilename,
+                'errorHandler' => $this->errorHandler,
+                'pathAttribute' => 'path',
+                'baseUrlAttribute' => 'base_url',
+                'pathAttributeName' => 'path',
+                'baseUrlAttributeName' => 'base_url',
                 'messages' => [
                     'maxNumberOfFiles' => Yii::t($this->messagesCategory, 'Maximum number of files exceeded'),
                     'acceptFileTypes' => Yii::t($this->messagesCategory, 'File type not allowed'),
@@ -155,7 +196,7 @@ class Upload extends InputWidget
         $content = Html::beginTag('div');
         $content .= Html::hiddenInput($this->name, null, [
             'class' => 'empty-value',
-            'id' => $this->options['id']
+            'id' => $this->hiddenInputId === null ? $this->options['id'] : $this->hiddenInputId
         ]);
         $content .= Html::fileInput($this->getFileInputName(), null, [
             'name' => $this->getFileInputName(),
@@ -177,5 +218,28 @@ class Upload extends InputWidget
             JuiAsset::register($this->getView());
         }
         $this->getView()->registerJs("jQuery('#{$this->getId()}').yiiUploadKit({$options});");
+    }
+
+    /**
+     * Adding attribute to yiiActiveForm validator
+     */
+    public function addFieldValidator()
+    {
+        $inputID = $this->field->inputId;
+        if (isset($this->field->selectors['error'])) {
+            $errorSelector = $this->field->selectors['error'];
+        } elseif (isset($this->field->errorOptions['class'])) {
+            $errorSelector = '.' . implode('.', preg_split('/\s+/', $this->field->errorOptions['class'], -1, PREG_SPLIT_NO_EMPTY));
+        } else {
+            $errorSelector = isset($this->field->errorOptions['tag']) ? $this->field->errorOptions['tag'] : 'span';
+        }
+        $clientValidator[] = [
+            'id' => Html::getInputId($this->model, $this->attribute),
+            'name' => $this->attribute,
+            'container' => isset($this->field->selectors['container']) ? $this->field->selectors['container'] : ".field-$inputID",
+            'input' => isset($this->field->selectors['input']) ? $this->field->selectors['input'] : "#$inputID",
+            'error' => $errorSelector
+        ];
+        $this->field->form->attributes = ArrayHelper::merge($this->field->form->attributes, $clientValidator);
     }
 }

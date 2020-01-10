@@ -11,7 +11,7 @@
     ],
     "minimum-stability": "dev",
     "replace": {
-        "trntv/yii2-file-kit": "*"
+        "yii2-starter-kit/yii2-file-kit": "*"
     },
     "require": {
         "yiisoft/yii2": "^2.0.0",

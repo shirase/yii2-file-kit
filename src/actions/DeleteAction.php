@@ -6,18 +6,18 @@
  * Time: 1:20 PM
  */
 
-namespace shirase55\filekit\actions;
+namespace trntv\filekit\actions;
 
 use yii\web\HttpException;
 use League\Flysystem\FilesystemInterface;
-use shirase55\filekit\events\UploadEvent;
+use trntv\filekit\events\UploadEvent;
 use League\Flysystem\File as FlysystemFile;
 
 /**
  * public function actions(){
  *   return [
  *           'upload'=>[
- *               'class'=>'shirase55\filekit\actions\DeleteAction',
+ *               'class'=>'trntv\filekit\actions\DeleteAction',
  *               'on afterDelete' => function($event) {
  *                   $file = $event->file;
  *                   $thumb_path = Yii::getAlias('@storage/web/source/thumb/') . $file->getPath();
@@ -55,7 +55,7 @@ class DeleteAction extends BaseAction
             throw new HttpException(403);
         }
     }
-    
+
     /**
      * @param $path
      */

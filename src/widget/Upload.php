@@ -3,7 +3,7 @@
  * Author: Eugine Terentev <eugine@terentev.net>
  */
 
-namespace shirase55\filekit\widget;
+namespace trntv\filekit\widget;
 
 use Yii;
 use yii\base\InvalidParamException;
@@ -16,7 +16,7 @@ use yii\widgets\InputWidget;
 
 /**
  * Class Upload
- * @package shirase55\filekit\widget
+ * @package trntv\filekit\widget
  */
 class Upload extends InputWidget
 {

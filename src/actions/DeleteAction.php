@@ -55,7 +55,7 @@ class DeleteAction extends BaseAction
             throw new HttpException(403);
         }
     }
-
+    
     /**
      * @param $path
      */

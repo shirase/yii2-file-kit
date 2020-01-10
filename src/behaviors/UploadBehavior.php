@@ -35,30 +35,28 @@ class UploadBehavior extends Behavior
      */
     public $attributePrefix;
 
-    /**
-     * @var string
-     */
-    public $urlAttribute;
+    public $attributePathName = 'path';
+    public $attributeBaseUrlName = 'base_url';
     /**
      * @var string
      */
     public $pathAttribute;
-
+    /**
+     * @var string
+     */
+    public $baseUrlAttribute;
     /**
      * @var string
      */
     public $typeAttribute;
-
     /**
      * @var string
      */
     public $sizeAttribute;
-
     /**
      * @var string
      */
     public $nameAttribute;
-
     /**
      * @var string
      */
@@ -68,12 +66,12 @@ class UploadBehavior extends Behavior
      * @var string name of the relation
      */
     public $uploadRelation;
-
     /**
      * @var $uploadModel
      * Schema example:
      *      `id` INT NOT NULL AUTO_INCREMENT,
      *      `path` VARCHAR(1024) NOT NULL,
+     *      `base_url` VARCHAR(255) NULL,
      *      `type` VARCHAR(255) NULL,
      *      `size` INT NULL,
      *      `name` VARCHAR(255) NULL,
@@ -81,7 +79,6 @@ class UploadBehavior extends Behavior
      *      `foreign_key_id` INT NOT NULL,
      */
     public $uploadModel;
-
     /**
      * @var string
      */
@@ -92,8 +89,6 @@ class UploadBehavior extends Behavior
      * Filestorage component name or Yii2 compatible object configuration
      */
     public $filesStorage = 'fileStorage';
-
-    public $additionalFields = [];
 
     /**
      * @var array
@@ -134,8 +129,8 @@ class UploadBehavior extends Behavior
     public function fields()
     {
         $fields = [
-            'url' => $this->urlAttribute,
-            'path' => $this->pathAttribute,
+            $this->attributePathName ? : 'path' => $this->pathAttribute,
+            $this->attributeBaseUrlName ? : 'base_url' => $this->baseUrlAttribute,
             'type' => $this->typeAttribute,
             'size' => $this->sizeAttribute,
             'name' => $this->nameAttribute,
@@ -146,10 +141,6 @@ class UploadBehavior extends Behavior
             $fields = array_map(function ($fieldName) {
                 return $this->attributePrefix . $fieldName;
             }, $fields);
-        }
-
-        foreach ($this->additionalFields as $field) {
-            $fields[$field] = $field;
         }
 
         return $fields;
@@ -346,14 +337,6 @@ class UploadBehavior extends Behavior
     protected function getUploaded()
     {
         $files = $this->owner->{$this->attribute};
-        if ($files) {
-            foreach ($this->additionalFields as $field) {
-                $files = array_map(function($file) use ($field) {
-                    $file[$field] = $this->owner->{$field};
-                    return $file;
-                }, $files);
-            }
-        }
         return $files ?: [];
     }
 
@@ -372,9 +355,6 @@ class UploadBehavior extends Behavior
      */
     protected function loadModel(&$model, $data)
     {
-        if (!isset($data))
-            return $model;
-
         $attributes = array_flip($model->attributes());
         foreach ($this->fields() as $dataField => $modelField) {
             if ($modelField && array_key_exists($modelField, $attributes)) {
@@ -418,8 +398,7 @@ class UploadBehavior extends Behavior
             $data = [
                 'type' => $fs->getMimetype($file['path']),
                 'size' => $fs->getSize($file['path']),
-                'timestamp' => $fs->getTimestamp($file['path']),
-                'url' => $this->getStorage()->baseUrl . '/' . $file['path'],
+                'timestamp' => $fs->getTimestamp($file['path'])
             ];
             foreach ($data as $k => $v) {
                 if (!array_key_exists($k, $file) || !$file[$k]) {

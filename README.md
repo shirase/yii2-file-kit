@@ -241,6 +241,7 @@ For multiple files
             'attribute' => 'files',
             'uploadRelation' => 'uploadedFiles',
             'pathAttribute' => 'path',
+            'baseUrlAttribute' => 'base_url',
             'typeAttribute' => 'type',
             'sizeAttribute' => 'size',
             'nameAttribute' => 'name',
@@ -260,6 +261,7 @@ For single file upload
               'filesStorage' => 'fileStorageMy', // my custom fileStorage from configuration(for properly remove the file from disk)
               'attribute' => 'file',
               'pathAttribute' => 'path',
+              'baseUrlAttribute' => 'base_url',
                ...
           ],
       ];

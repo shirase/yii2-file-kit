@@ -1,6 +1,6 @@
 <?php
 
-namespace shirase55\filekit\tests;
+namespace trntv\filekit\tests;
 
 use yii\di\Container;
 use yii\helpers\ArrayHelper;

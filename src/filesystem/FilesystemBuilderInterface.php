@@ -1,9 +1,9 @@
 <?php
-namespace shirase55\filekit\filesystem;
+namespace trntv\filekit\filesystem;
 
 /**
  * Interface FilesystemBuilderInterface
- * @package shirase55\filekit\filesystem
+ * @package trntv\filekit\filesystem
  */
 interface FilesystemBuilderInterface
 {

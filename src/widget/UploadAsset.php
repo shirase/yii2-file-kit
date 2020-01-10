@@ -3,7 +3,7 @@
  * Author: Eugine Terentev <eugine@terentev.net>
  */
 
-namespace shirase55\filekit\widget;
+namespace trntv\filekit\widget;
 
 use yii\web\AssetBundle;
 
@@ -13,7 +13,7 @@ class UploadAsset extends AssetBundle
     public $depends = [
         'yii\web\JqueryAsset',
         'yii\bootstrap\BootstrapAsset',
-        'shirase55\filekit\widget\BlueimpFileuploadAsset'
+        'trntv\filekit\widget\BlueimpFileuploadAsset'
     ];
 
     public function init()

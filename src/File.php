@@ -1,5 +1,5 @@
 <?php
-namespace shirase55\filekit;
+namespace trntv\filekit;
 
 use yii\base\InvalidConfigException;
 use yii\base\InvalidParamException;
@@ -9,7 +9,7 @@ use yii\web\UploadedFile;
 
 /**
  * Class File
- * @package shirase55\filekit
+ * @package trntv\filekit
  * @author Eugene Terentev <eugene@terentev.net>
  */
 class File extends Object

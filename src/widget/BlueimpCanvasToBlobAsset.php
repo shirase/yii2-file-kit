@@ -1,5 +1,5 @@
 <?php
-namespace shirase55\filekit\widget;
+namespace trntv\filekit\widget;
 
 use yii\web\AssetBundle;
 

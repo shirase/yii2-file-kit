@@ -21,7 +21,7 @@
         "creocoder/yii2-flysystem": "~0.8"
     },
     "autoload": {
-        "psr-4": { "shirase55\\filekit\\": "src/" }
+        "psr-4": { "trntv\\filekit\\": "src/" }
     },
     "extra":{
         "asset-installer-paths": {

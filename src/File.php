@@ -3,7 +3,7 @@ namespace shirase55\filekit;
 
 use yii\base\InvalidConfigException;
 use yii\base\InvalidParamException;
-use yii\base\Object;
+use yii\base\BaseObject;
 use yii\helpers\FileHelper;
 use yii\web\UploadedFile;
 
@@ -12,7 +12,7 @@ use yii\web\UploadedFile;
  * @package shirase55\filekit
  * @author Eugene Terentev <eugene@terentev.net>
  */
-class File extends Object
+class File extends BaseObject
 {
     /**
      * @var

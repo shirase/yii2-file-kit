@@ -31,9 +31,9 @@
                     })
                 }
                 $input.wrapAll($('<li class="upload-kit-input"></div>'))
-                    .after($('<span class="glyphicon glyphicon-plus-sign add"></span>'))
-                    .after($('<span class="glyphicon glyphicon-circle-arrow-down drag"></span>'))
-                    .after($('<span/>', {"data-toggle":"popover", "class":"glyphicon glyphicon-exclamation-sign error-popover"}))
+                    .after($('<span class="fas fa-plus-circle add"></span>'))
+                    .after($('<span class="fas fa-arrow-alt-circle-down drag"></span>'))
+                    .after($('<span/>', {"data-toggle":"popover", "class":"fas fa-exclamation-circle error-popover"}))
                     .after(
                         '<div class="progress">'+
                         '<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>'+
@@ -169,7 +169,7 @@
                         "title": file.name,
                         "text": options.showPreviewFilename ? file.name : null
                     }))
-                    .append($('<span/>', {"class": "glyphicon glyphicon-remove-circle remove", "data-url": file.delete_url}));
+                    .append($('<span/>', {"class": "fas fa-times-circle remove", "data-url": file.delete_url}));
                 if ((!file.type || file.type.search(/image\/.*/g) !== -1) && options.previewImage) {
                     item.removeClass('not-image').addClass('image');
                     item.prepend($('<img/>', {src: file[options.baseUrlAttribute] + '/' +file[options.pathAttribute]}));
@@ -211,7 +211,7 @@
                     $(item).find('input[data-role=order]').val(index);
                 })
             }
-        }; 
+        };
 
         methods.init.apply(this);
         return this;
